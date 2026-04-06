@@ -1,0 +1,27 @@
+{
+  "name": "ai-prompt-generator-api",
+  "version": "1.0.0",
+  "description": "AI Prompt Generator API for MidJourney, DALL-E, and Flux",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "seed": "node src/db/seed.js",
+    "db:init": "node src/db/init.js"
+  },
+  "keywords": ["ai", "prompt-generator", "midjourney", "dalle", "flux"],
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0",
+    "sql.js": "^1.11.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

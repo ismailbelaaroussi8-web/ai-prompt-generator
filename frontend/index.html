@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Prompt Generator — Perfect Prompts for MidJourney, DALL-E 3 & Flux</title>
+  <meta name="description" content="Generate stunning AI image prompts for MidJourney, DALL-E 3, and Flux. Free, instant, no signup. Browse 100+ curated prompts.">
+  <meta name="keywords" content="AI prompt generator, MidJourney prompts, DALL-E prompts, Flux prompts, AI image generation">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ═══ Navigation ═══════════════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">🎨 <span>Prompt</span>Gen</a>
+      <div class="nav-links">
+        <a href="#generator">Generator</a>
+        <a href="#library">Library</a>
+        <a href="#how-it-works">How It Works</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ Hero Section ═════════════════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <h1>Generate Perfect AI Image Prompts</h1>
+      <p>For MidJourney, DALL-E 3, and Flux — free, instant, no signup</p>
+      <button class="cta-btn" id="cta-btn" onclick="document.getElementById('generator').scrollIntoView({behavior:'smooth'})">
+        ✨ Generate a Prompt
+      </button>
+    </div>
+  </section>
+
+  <!-- ═══ Ad: Top Banner ═══════════════════════════════════════════════════ -->
+  <!-- 
+    ADSENSE: Replace the inner content of this div with your AdSense ad unit code.
+    Recommended size: 728x90 Leaderboard (desktop).
+    Example: <ins class="adsbygoogle" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX" ...></ins>
+  -->
+  <div id="ad-top-banner" class="ad-zone container">
+    <span>728 × 90 — Ad Space</span>
+  </div>
+
+  <!-- ═══ Prompt Generator Section ═════════════════════════════════════════ -->
+  <section class="generator" id="generator">
+    <div class="container">
+      <h2 class="section-title">✍️ Prompt Generator</h2>
+      <p class="section-subtitle">Describe your vision and we'll craft the perfect prompt for your AI tool.</p>
+
+      <div class="generator-layout">
+        <div class="generator-main">
+
+          <!-- Generator form -->
+          <div class="gen-form">
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" placeholder="e.g. a samurai standing in the rain at sunset" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="style">Style</label>
+                <select id="style">
+                  <option value="">— Choose style —</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="lighting">Lighting</label>
+                <select id="lighting">
+                  <option value="">— Choose lighting —</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="mood">Mood</label>
+                <select id="mood">
+                  <option value="">— Choose mood —</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="aspect-ratio">Aspect Ratio</label>
+                <select id="aspect-ratio">
+                </select>
+              </div>
+              <div class="form-group full-width">
+                <label>Target Tool</label>
+                <div class="tool-tabs" id="tool-tabs">
+                  <button class="tool-tab active" data-tool="midjourney" type="button">MidJourney</button>
+                  <button class="tool-tab" data-tool="dalle" type="button">DALL-E 3</button>
+                  <button class="tool-tab" data-tool="flux" type="button">Flux</button>
+                </div>
+              </div>
+            </div>
+            <button class="generate-btn" id="generate-btn" type="button">
+              <span class="spinner"></span>
+              <span class="btn-text">Generate Prompt</span>
+            </button>
+          </div>
+
+          <!-- Error message -->
+          <div class="error-msg" id="error-msg"></div>
+
+          <!-- Output box -->
+          <div class="output-box" id="output-box">
+            <div class="output-header">
+              <span class="output-label">Generated Prompt</span>
+              <span class="output-meta" id="char-count"></span>
+            </div>
+            <div class="output-prompt" id="output-prompt"></div>
+            <div class="output-actions">
+              <button class="output-btn copy-btn" id="copy-btn" type="button">📋 Copy</button>
+              <button class="output-btn" id="regenerate-btn" type="button">🔄 Regenerate</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ═══ Ad: Sidebar ══════════════════════════════════════════════ -->
+        <!--
+          ADSENSE: Replace inner content with a 300x250 Medium Rectangle ad unit.
+          Example: <ins class="adsbygoogle" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX" ...></ins>
+        -->
+        <aside id="ad-sidebar" class="ad-zone">
+          <span>300 × 250<br>Ad Space</span>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Prompt Library Section ═══════════════════════════════════════════ -->
+  <section class="library" id="library">
+    <div class="container">
+      <h2 class="section-title">📚 Browse 100+ Curated Prompts</h2>
+      <p class="section-subtitle">Hand-crafted prompts ready to paste into your favourite AI image tool.</p>
+
+      <div class="category-filters" id="category-filters">
+        <button class="filter-pill active" data-category="all">All</button>
+        <button class="filter-pill" data-category="portrait">Portrait</button>
+        <button class="filter-pill" data-category="landscape">Landscape</button>
+        <button class="filter-pill" data-category="product">Product</button>
+        <button class="filter-pill" data-category="anime">Anime</button>
+        <button class="filter-pill" data-category="architecture">Architecture</button>
+      </div>
+
+      <div class="prompt-grid" id="prompt-grid">
+        <!-- Cards injected by JS -->
+      </div>
+
+      <button class="load-more-btn" id="load-more-btn" type="button">Load More</button>
+    </div>
+  </section>
+
+  <!-- ═══ How It Works ═════════════════════════════════════════════════════ -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <h2 class="section-title" style="text-align:center">How It Works</h2>
+      <p class="section-subtitle" style="text-align:center">Three simple steps to the perfect AI image.</p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-icon">📝</div>
+          <span class="step-num">Step 1</span>
+          <h3>Fill the Form</h3>
+          <p>Describe your subject, pick a style, lighting, mood, and target tool.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-icon">⚡</div>
+          <span class="step-num">Step 2</span>
+          <h3>Generate Prompt</h3>
+          <p>Our engine crafts a detailed, tool-optimised prompt instantly.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-icon">🎨</div>
+          <span class="step-num">Step 3</span>
+          <h3>Paste & Create</h3>
+          <p>Copy the prompt and paste it into MidJourney, DALL-E 3, or Flux.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Footer ═══════════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">🎨 <span>Prompt</span>Gen</div>
+        <div class="footer-links">
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+      <p class="footer-tagline">Built for MidJourney, DALL-E 3, and Flux users · © 2026 PromptGen</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
