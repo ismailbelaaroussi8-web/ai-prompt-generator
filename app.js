@@ -4,7 +4,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 document.addEventListener('DOMContentLoaded', () => {
-  const API_BASE = `${window.location.origin}/api`;
+  const API_BASE = 'http://localhost:5000/api';
   
   // Elements
   const generateBtn = document.getElementById('generate-btn');
@@ -65,16 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
   generateBtn.addEventListener('click', generatePrompt);
   regenerateBtn.addEventListener('click', generatePrompt);
 
-  function scrollToSubject() {
-    const subjectEl = document.getElementById('subject');
-    if (!subjectEl) return;
-    subjectEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    window.setTimeout(() => subjectEl.focus({ preventScroll: true }), 450);
-  }
-
   async function generatePrompt() {
-    const subjectEl = document.getElementById('subject');
-    const subject = subjectEl.value.trim();
+    const subject = document.getElementById('subject').value.trim();
     const style = document.getElementById('style').value;
     const lighting = document.getElementById('lighting').value;
     const mood = document.getElementById('mood').value;
@@ -82,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!subject) {
       showError('Please describe your subject first.');
-      scrollToSubject();
+      document.getElementById('subject').focus();
       return;
     }
 
@@ -92,151 +84,79 @@ document.addEventListener('DOMContentLoaded', () => {
     generateBtn.disabled = true;
     regenerateBtn.classList.add('loading');
     regenerateBtn.disabled = true;
+    
+    // Smooth scroll to gen area
+    document.getElementById('generator').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-    document.getElementById('generator')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-    try {
-      const response = await fetch(`${API_BASE}/generate-prompt`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          subject,
-          style,
-          lighting,
-          mood,
-          aspect_ratio: aspectRatio,
-          tool: currentTool
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to generate prompt');
+    // Slight delay to keep the "generating" UX feel
+    setTimeout(() => {
+      try {
+        const finalPrompt = generateLocalPrompt(subject, style, lighting, mood, aspectRatio, currentTool);
+        displayOutput(finalPrompt);
+      } catch (err) {
+        console.error('Generator Error:', err);
+        showError('Failed to generate prompt.');
+      } finally {
+        generateBtn.classList.remove('loading');
+        generateBtn.disabled = false;
+        regenerateBtn.classList.remove('loading');
+        regenerateBtn.disabled = false;
       }
-
-      displayOutput(data.data.prompt);
-      
-    } catch (err) {
-      console.error('Generator Error:', err);
-      // Fallback if backend is unreachable
-      if (err.message === 'Failed to fetch') {
-        const fakePrompt = generateClientSidePrompt(subject, style, lighting, currentTool);
-        displayOutput(fakePrompt);
-        showError('Backend offline. Built a local prompt approximation.');
-      } else {
-        showError(err.message);
-      }
-    } finally {
-      generateBtn.classList.remove('loading');
-      generateBtn.disabled = false;
-      regenerateBtn.classList.remove('loading');
-      regenerateBtn.disabled = false;
-    }
+    }, 400);
   }
 
-  function displayOutput(promptText, opts = {}) {
-    const scrollToResult = opts.scroll !== false;
+  function displayOutput(promptText) {
     outputBox.classList.add('visible');
     outputPrompt.textContent = promptText;
     charCount.textContent = `${promptText.length} characters`;
-
+    
+    // Save to local storage
     localStorage.setItem('lastGeneratedPrompt', promptText);
 
+    // Reset copy button
     copyBtn.textContent = '📋 Copy';
     copyBtn.classList.remove('copied');
-
-    if (scrollToResult) {
-      requestAnimationFrame(() => {
-        outputBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      });
-    }
   }
 
-  function generateClientSidePrompt(subject, style, lighting, tool) {
-    let p = subject;
-    if (style) p += `, ${style} style`;
-    if (lighting) p += `, ${lighting} lighting`;
+  function generateLocalPrompt(subject, style, lighting, mood, aspectRatio, tool) {
+    let promptText = "";
     
-    if (tool === 'midjourney') return p + ' --v 6 --quality 2';
-    if (tool === 'dalle') return p + '. Highly detailed, professional quality.';
-    if (tool === 'flux') return p + ' [quality: ultra]';
-    return p;
+    if (tool === 'midjourney') {
+      promptText = subject;
+      if (style) promptText += `, ${style}`;
+      if (lighting) promptText += `, ${lighting}`;
+      if (mood) promptText += `, ${mood}`;
+      promptText += ` --ar ${aspectRatio} --v 6.1 --style raw`;
+    } 
+    else if (tool === 'dalle') {
+      promptText = `A ${subject}.`;
+      if (style) promptText += ` Style: ${style}.`;
+      if (lighting) promptText += ` Lighting: ${lighting}.`;
+      if (mood) promptText += ` Mood: ${mood}.`;
+      if (aspectRatio) promptText += ` Aspect ratio: ${aspectRatio}.`;
+      promptText += ` Photorealistic, highly detailed.`;
+    }
+    else if (tool === 'flux') {
+      promptText = subject;
+      if (style) promptText += ` | ${style} aesthetic`;
+      if (lighting) promptText += ` | ${lighting} lighting`;
+      if (mood) promptText += ` | ${mood} atmosphere`;
+      promptText += ` | ultra detailed`;
+    }
+    
+    return promptText;
   }
 
-  /* Display names for API slugs (matches src/engine/promptGenerator.js keys) */
-  const STYLE_LABELS = {
-    photorealistic: 'Photorealistic',
-    cinematic: 'Cinematic',
-    'oil-painting': 'Oil painting',
-    watercolor: 'Watercolor',
-    'digital-art': 'Digital art · neon / illustration',
-    '3d-render': '3D render',
-    anime: 'Anime',
-    'concept-art': 'Fantasy · concept art',
-    minimalist: 'Minimalist',
-    surreal: 'Surreal',
-    'pop-art': 'Pop art',
-    gothic: 'Gothic',
-    'pixel-art': 'Pixel art',
-    impressionist: 'Impressionist',
-    'comic-book': 'Comic book'
-  };
-
-  const LIGHTING_LABELS = {
-    'golden-hour': 'Golden hour',
-    dramatic: 'Dramatic',
-    neon: 'Neon',
-    soft: 'Soft · natural',
-    studio: 'Studio',
-    backlit: 'Backlit',
-    moonlight: 'Moonlight',
-    volumetric: 'Volumetric · god rays',
-    natural: 'Natural daylight',
-    noir: 'Film noir'
-  };
-
-  const MOOD_LABELS = {
-    epic: 'Epic',
-    serene: 'Peaceful · serene',
-    mysterious: 'Mysterious',
-    joyful: 'Joyful',
-    melancholic: 'Melancholic',
-    dark: 'Dark · moody',
-    whimsical: 'Whimsical',
-    futuristic: 'Futuristic',
-    romantic: 'Romantic',
-    chaotic: 'Energetic · chaotic'
-  };
-
-  const ASPECT_LABELS = {
-    '1:1': '1:1 — Square',
-    '16:9': '16:9 — Widescreen',
-    '9:16': '9:16 — Vertical / stories',
-    '4:3': '4:3 — Standard',
-    '3:4': '3:4 — Portrait',
-    '21:9': '21:9 — Ultra-wide',
-    '2:3': '2:3 — Portrait print',
-    '3:2': '3:2 — Landscape'
-  };
-
-  function labelForSelect(selectId, value) {
-    if (selectId === 'aspect-ratio') return ASPECT_LABELS[value] || value;
-    const map = { style: STYLE_LABELS, lighting: LIGHTING_LABELS, mood: MOOD_LABELS }[selectId];
-    if (map && map[value]) return map[value];
-    return value
-      .split('-')
-      .map((w) => (w ? w.charAt(0).toUpperCase() + w.slice(1) : ''))
-      .join(' ')
-      .trim();
+  /* ── Utilities ─────────────────────────────────────────────────────────── */
+  function escapeHTML(str) {
+    if (!str && str !== 0) return '';
+    return str.toString()
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
-
-  const FALLBACK_FROM_LABELS = {
-    style: Object.keys(STYLE_LABELS),
-    lighting: Object.keys(LIGHTING_LABELS),
-    mood: Object.keys(MOOD_LABELS),
-    'aspect-ratio': Object.keys(ASPECT_LABELS)
-  };
 
   /* ── Dynamic Form Options ──────────────────────────────────────────────── */
   async function loadFormOptions() {
@@ -244,38 +164,43 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(`${API_BASE}/generate-prompt/options`);
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error('Failed to load options');
-
-      const d = data.data || {};
-      populateSelect('style', Array.isArray(d.styles) && d.styles.length ? d.styles : FALLBACK_FROM_LABELS.style, '— Choose style —');
-      populateSelect('lighting', Array.isArray(d.lighting) && d.lighting.length ? d.lighting : FALLBACK_FROM_LABELS.lighting, '— Choose lighting —');
-      populateSelect('mood', Array.isArray(d.moods) && d.moods.length ? d.moods : FALLBACK_FROM_LABELS.mood, '— Choose mood —');
-      populateSelect('aspect-ratio', Array.isArray(d.aspect_ratios) && d.aspect_ratios.length ? d.aspect_ratios : FALLBACK_FROM_LABELS['aspect-ratio'], '');
+      
+      const { styles, lighting, moods, aspect_ratios } = data.data;
+      
+      populateSelect('style', styles, '— Choose style —');
+      populateSelect('lighting', lighting, '— Choose lighting —');
+      populateSelect('mood', moods, '— Choose mood —');
+      populateSelect('aspect-ratio', aspect_ratios, '');
     } catch (err) {
       console.warn('Could not load form options:', err);
-      populateSelect('style', FALLBACK_FROM_LABELS.style, '— Choose style —');
-      populateSelect('lighting', FALLBACK_FROM_LABELS.lighting, '— Choose lighting —');
-      populateSelect('mood', FALLBACK_FROM_LABELS.mood, '— Choose mood —');
-      populateSelect('aspect-ratio', FALLBACK_FROM_LABELS['aspect-ratio'], '');
     }
   }
 
-  function populateSelect(id, options, placeholder) {
+  function populateSelect(id, options, defaultOption) {
     const select = document.getElementById(id);
     if (!select) return;
-
-    select.textContent = '';
-    if (placeholder) {
-      const ph = document.createElement('option');
-      ph.value = '';
-      ph.textContent = placeholder;
-      select.appendChild(ph);
+    
+    let html = '';
+    if (defaultOption) {
+      html += `<option value="">${escapeHTML(defaultOption)}</option>`;
     }
-    (options || []).forEach((value) => {
-      const opt = document.createElement('option');
-      opt.value = value;
-      opt.textContent = labelForSelect(id, value);
-      select.appendChild(opt);
+    
+    options.forEach(opt => {
+      let label = opt.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      if (id === 'aspect-ratio') {
+        const ratioLabels = {
+          '1:1': '1:1 — Square',
+          '16:9': '16:9 — Widescreen',
+          '9:16': '9:16 — Vertical',
+          '4:3': '4:3 — Standard',
+          '3:2': '3:2 — Landscape'
+        };
+        label = ratioLabels[opt] || opt;
+      }
+      html += `<option value="${escapeHTML(opt)}">${escapeHTML(label)}</option>`;
     });
+    
+    select.innerHTML = html;
   }
 
   /* ── Copy Action ───────────────────────────────────────────────────────── */
@@ -389,46 +314,32 @@ document.addEventListener('DOMContentLoaded', () => {
   function appendPromptCard(prompt) {
     const card = document.createElement('div');
     card.className = 'prompt-card fade-in';
-
-    const toolKey = ['midjourney', 'dalle', 'flux'].includes(prompt.tool_target)
-      ? prompt.tool_target
-      : 'midjourney';
+    
+    // Format tool name nicely
     const toolDisplay = {
-      midjourney: 'MidJourney',
-      dalle: 'DALL-E 3',
-      flux: 'Flux'
-    }[toolKey] || prompt.tool_target;
+      'midjourney': 'MidJourney',
+      'dalle': 'DALL-E 3',
+      'flux': 'Flux'
+    }[prompt.tool_target] || prompt.tool_target;
 
-    const header = document.createElement('div');
-    header.className = 'card-header';
-    const badge = document.createElement('span');
-    badge.className = 'category-badge';
-    badge.textContent = prompt.category || '';
-    const tag = document.createElement('span');
-    tag.className = `tool-tag ${toolKey}`;
-    tag.textContent = toolDisplay;
-    header.append(badge, tag);
-
-    const title = document.createElement('h3');
-    title.className = 'card-title';
-    title.textContent = prompt.title || '';
-
-    const body = document.createElement('div');
-    body.className = 'card-prompt';
-    body.textContent = prompt.prompt_text || '';
-
-    const footer = document.createElement('div');
-    footer.className = 'card-footer';
-    const likes = document.createElement('span');
-    likes.className = 'card-likes';
-    likes.textContent = `❤️ ${prompt.likes || 0}`;
-    const cbtn = document.createElement('button');
-    cbtn.type = 'button';
-    cbtn.className = 'card-copy';
-    cbtn.textContent = 'Copy';
-    const fullText = String(prompt.prompt_text || '');
-    cbtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(fullText).then(() => {
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="category-badge">${escapeHTML(prompt.category)}</span>
+        <span class="tool-tag ${escapeHTML(prompt.tool_target)}">${escapeHTML(toolDisplay)}</span>
+      </div>
+      <h3 class="card-title">${escapeHTML(prompt.title)}</h3>
+      <div class="card-prompt">${escapeHTML(prompt.prompt_text)}</div>
+      <div class="card-footer">
+        <span class="card-likes">❤️ ${escapeHTML(prompt.likes || 0)}</span>
+        <button class="card-copy" data-prompt="${escapeHTML(prompt.prompt_text)}">Copy</button>
+      </div>
+    `;
+    
+    // Setup copy button on the card
+    const cbtn = card.querySelector('.card-copy');
+    cbtn.addEventListener('click', (e) => {
+      const text = e.target.dataset.prompt;
+      navigator.clipboard.writeText(text).then(() => {
         cbtn.textContent = 'Copied!';
         cbtn.classList.add('copied');
         setTimeout(() => {
@@ -437,9 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2000);
       });
     });
-    footer.append(likes, cbtn);
 
-    card.append(header, title, body, footer);
     promptGrid.appendChild(card);
   }
 
@@ -464,27 +373,12 @@ document.addEventListener('DOMContentLoaded', () => {
     errorMsg.classList.remove('visible');
   }
 
-  /* ── Hero CTA & nav ──────────────────────────────────────────────────── */
-  const ctaBtn = document.getElementById('cta-btn');
-  if (ctaBtn) {
-    ctaBtn.addEventListener('click', () => {
-      scrollToSubject();
-    });
-  }
-
-  const navbar = document.getElementById('navbar');
-  const onNavScroll = () => {
-    if (!navbar) return;
-    navbar.classList.toggle('nav-scrolled', window.scrollY > 48);
-  };
-  window.addEventListener('scroll', onNavScroll, { passive: true });
-  onNavScroll();
-
   /* ── Initialization ────────────────────────────────────────────────────── */
   loadFormOptions();
-
+  
+  // Load last prompt if exists
   const lastState = localStorage.getItem('lastGeneratedPrompt');
   if (lastState) {
-    displayOutput(lastState, { scroll: false });
+    displayOutput(lastState);
   }
 });
