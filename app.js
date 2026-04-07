@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const copyBtn = document.getElementById('copy-btn');
   const regenerateBtn = document.getElementById('regenerate-btn');
   
+  const dashToggle = document.getElementById('dash-toggle');
+  const dashMenu = document.getElementById('dash-menu');
+  
   /* ── Runtime State ─────────────────────────────────────────────────────── */
   let currentTool = 'midjourney';
   let uploadedImageName = null;
@@ -117,8 +120,26 @@ document.addEventListener('DOMContentLoaded', () => {
       toolTabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       currentTool = tab.dataset.tool;
+      
+      // Feature Autonomy: If an output is already generated, instantly recompile for the new engine!
+      if (outputBox.classList.contains('visible')) {
+        executeGeneration();
+      }
     });
   });
+
+  /* ── Dashboard Menu ────────────────────────────────────────────────────── */
+  if (dashToggle && dashMenu) {
+    dashToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dashMenu.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!dashMenu.contains(e.target) && e.target !== dashToggle) {
+        dashMenu.classList.remove('open');
+      }
+    });
+  }
 
   /* ── Compiler Generation ───────────────────────────────────────────────── */
   generateBtn.addEventListener('click', executeGeneration);

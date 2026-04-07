@@ -11,21 +11,35 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Space Particles Background -->
-  <div id="particle-bg"></div>
+  <!-- Tech Basement Background -->
+  <div id="basement-bg"></div>
+  <div id="electric-wires"></div>
 
   <!-- ═══ Navigation ═══════════════════════════════════════════════════════ -->
   <nav class="navbar" id="navbar">
     <div class="container nav-inner">
       <div class="nav-left">
         <a href="#home" class="nav-logo" data-route="home">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-          ANTIGRAVITY
+          🔥 IMAGE TO PROMPT
         </a>
         <div class="nav-links">
           <a href="#about" data-route="about">About</a>
           <a href="#faq" data-route="faq">FAQ</a>
           <a href="#contact" data-route="contact">Contact Us</a>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="user-dashboard">
+          <button class="dash-toggle" id="dash-toggle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg>
+            Dashboard
+          </button>
+          <div class="dash-menu glass-panel" id="dash-menu">
+            <a href="#" class="dash-item" onclick="event.preventDefault()">✨ New Chat</a>
+            <a href="#" class="dash-item" onclick="event.preventDefault()">📜 Previous Chats</a>
+            <a href="#" class="dash-item" onclick="event.preventDefault()">👥 Contacts</a>
+            <a href="#" class="dash-item" onclick="event.preventDefault()">⭐ Review</a>
+          </div>
         </div>
       </div>
     </div>
@@ -79,6 +93,32 @@
           </button>
         </div>
         <div class="error-msg" id="error-msg"></div>
+
+        <!-- Scrolling Features Marquee -->
+        <div class="marquee-container">
+          <div class="marquee-content">
+            <span>⚡ Zero Latency Processing</span>
+            <span class="dot">•</span>
+            <span>MidJourney V6.1 Engine</span>
+            <span class="dot">•</span>
+            <span>DALL-E 3 Logic Optimization</span>
+            <span class="dot">•</span>
+            <span>Flux Realism Tuning</span>
+            <span class="dot">•</span>
+            <span>Offline Compilation Protocol</span>
+            <span class="dot">•</span>
+            <span>⚡ Zero Latency Processing</span>
+            <span class="dot">•</span>
+            <span>MidJourney V6.1 Engine</span>
+            <span class="dot">•</span>
+            <span>DALL-E 3 Logic Optimization</span>
+            <span class="dot">•</span>
+            <span>Flux Realism Tuning</span>
+            <span class="dot">•</span>
+            <span>Offline Compilation Protocol</span>
+            <span class="dot">•</span>
+          </div>
+        </div>
 
         <!-- Output Area -->
         <div class="output-box glass-panel" id="output-box">
