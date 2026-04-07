@@ -3,196 +3,199 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Prompt Generator — Perfect Prompts for MidJourney, DALL-E 3 & Flux</title>
-  <meta name="description" content="Generate stunning AI image prompts for MidJourney, DALL-E 3, and Flux. Free, instant, no signup. Browse 100+ curated prompts.">
-  <meta name="keywords" content="AI prompt generator, MidJourney prompts, DALL-E prompts, Flux prompts, AI image generation">
+  <title>Antigravity — AI Prompt Generator</title>
+  <meta name="description" content="Generate stunning AI image prompts for MidJourney, DALL-E 3, and Flux. Free, instant, no signup.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Space Particles Background -->
+  <div id="particle-bg"></div>
 
   <!-- ═══ Navigation ═══════════════════════════════════════════════════════ -->
   <nav class="navbar" id="navbar">
     <div class="container nav-inner">
-      <a href="#" class="nav-logo">🎨 <span>Prompt</span>Gen</a>
-      <div class="nav-links">
-        <a href="#generator">Generator</a>
-        <a href="#library">Library</a>
-        <a href="#how-it-works">How It Works</a>
+      <div class="nav-left">
+        <a href="#home" class="nav-logo" data-route="home">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          ANTIGRAVITY
+        </a>
+        <div class="nav-links">
+          <a href="#about" data-route="about">About</a>
+          <a href="#faq" data-route="faq">FAQ</a>
+          <a href="#contact" data-route="contact">Contact Us</a>
+        </div>
       </div>
     </div>
   </nav>
 
-  <!-- ═══ Hero Section ═════════════════════════════════════════════════════ -->
-  <section class="hero" id="hero">
-    <div class="hero-content">
-      <h1>Generate Perfect AI Image Prompts</h1>
-      <p>For MidJourney, DALL-E 3, and Flux — free, instant, no signup</p>
-      <button class="cta-btn" id="cta-btn" onclick="document.getElementById('generator').scrollIntoView({behavior:'smooth'})">
-        ✨ Generate a Prompt
-      </button>
-    </div>
-  </section>
-
   <!-- ═══ Ad: Top Banner ═══════════════════════════════════════════════════ -->
-  <!-- 
-    ADSENSE: Replace the inner content of this div with your AdSense ad unit code.
-    Recommended size: 728x90 Leaderboard (desktop).
-    Example: <ins class="adsbygoogle" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX" ...></ins>
-  -->
-  <div id="ad-top-banner" class="ad-zone container">
-    <span>728 × 90 — Ad Space</span>
+  <div class="container banner-container pt-nav">
+    <div id="ad-top-banner" class="ad-zone">
+      <span>728 × 90 — Premium Ad Space</span>
+    </div>
   </div>
 
-  <!-- ═══ Prompt Generator Section ═════════════════════════════════════════ -->
-  <section class="generator" id="generator">
-    <div class="container">
-      <h2 class="section-title">✍️ Prompt Generator</h2>
-      <p class="section-subtitle">Describe your vision and we'll craft the perfect prompt for your AI tool.</p>
+  <main id="app-root">
 
-      <div class="generator-layout">
-        <div class="generator-main">
+    <!-- ═══ HOME VIEW (Default) ════════════════════════════════════════════ -->
+    <section id="view-home" class="spa-view active">
+      <div class="container hero-container">
+        
+        <h1 class="hero-title">Generate The Impossible.</h1>
+        <p class="hero-subtitle">Convert thoughts and images into hyper-optimized parameters instantly.</p>
 
-          <!-- Generator form -->
-          <div class="gen-form">
-            <div class="form-grid">
-              <div class="form-group full-width">
-                <label for="subject">Subject</label>
-                <input type="text" id="subject" placeholder="e.g. a samurai standing in the rain at sunset" autocomplete="off">
-              </div>
-              <div class="form-group">
-                <label for="style">Style</label>
-                <select id="style">
-                  <option value="">— Choose style —</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="lighting">Lighting</label>
-                <select id="lighting">
-                  <option value="">— Choose lighting —</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="mood">Mood</label>
-                <select id="mood">
-                  <option value="">— Choose mood —</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="aspect-ratio">Aspect Ratio</label>
-                <select id="aspect-ratio">
-                </select>
-              </div>
-              <div class="form-group full-width">
-                <label>Target Tool</label>
-                <div class="tool-tabs" id="tool-tabs">
-                  <button class="tool-tab active" data-tool="midjourney" type="button">MidJourney</button>
-                  <button class="tool-tab" data-tool="dalle" type="button">DALL-E 3</button>
-                  <button class="tool-tab" data-tool="flux" type="button">Flux</button>
-                </div>
-              </div>
-            </div>
-            <button class="generate-btn" id="generate-btn" type="button">
-              <span class="spinner"></span>
-              <span class="btn-text">Generate Prompt</span>
-            </button>
+        <!-- Tool Toggle Pills -->
+        <div class="tool-tabs" id="tool-tabs">
+          <button class="tool-tab active" data-tool="midjourney" type="button">MidJourney</button>
+          <button class="tool-tab" data-tool="dalle" type="button">DALL-E 3</button>
+          <button class="tool-tab" data-tool="flux" type="button">Flux</button>
+        </div>
+
+        <!-- Unified Bar -->
+        <div class="unified-bar glass-panel" id="unified-bar">
+          
+          <div class="upload-zone" id="upload-zone">
+            <span class="upload-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            </span>
+            <span class="upload-text" id="upload-text">Upload Image</span>
+            <input type="file" id="image-input" accept="image/png, image/jpeg, image/webp" hidden>
+            <button class="remove-img-btn" id="remove-img-btn" style="display:none;" title="Remove image">✕</button>
           </div>
 
-          <!-- Error message -->
-          <div class="error-msg" id="error-msg"></div>
+          <div class="divider"></div>
 
-          <!-- Output box -->
-          <div class="output-box" id="output-box">
-            <div class="output-header">
-              <span class="output-label">Generated Prompt</span>
-              <span class="output-meta" id="char-count"></span>
-            </div>
-            <div class="output-prompt" id="output-prompt"></div>
-            <div class="output-actions">
-              <button class="output-btn copy-btn" id="copy-btn" type="button">📋 Copy</button>
-              <button class="output-btn" id="regenerate-btn" type="button">🔄 Regenerate</button>
-            </div>
+          <div class="text-zone">
+            <input type="text" id="subject" placeholder="Describe a universe, concept, or scene..." autocomplete="off">
           </div>
 
+          <button class="generate-btn-unified" id="generate-btn" type="button">
+            <span class="spinner"></span>
+            <span class="btn-text">Compute</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </div>
+        <div class="error-msg" id="error-msg"></div>
+
+        <!-- Output Area -->
+        <div class="output-box glass-panel" id="output-box">
+          <div class="output-header">
+            <span class="output-label">Compiled Syntax</span>
+            <span class="output-meta" id="char-count"></span>
+          </div>
+          <div class="output-prompt" id="output-prompt"></div>
+          <div class="output-actions">
+            <button class="output-btn copy-btn" id="copy-btn">📋 Copy Syntax</button>
+            <button class="output-btn" id="regenerate-btn">🔄 Recalculate</button>
+          </div>
         </div>
 
-        <!-- ═══ Ad: Sidebar ══════════════════════════════════════════════ -->
-        <!--
-          ADSENSE: Replace inner content with a 300x250 Medium Rectangle ad unit.
-          Example: <ins class="adsbygoogle" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX" ...></ins>
-        -->
-        <aside id="ad-sidebar" class="ad-zone">
-          <span>300 × 250<br>Ad Space</span>
-        </aside>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ Prompt Library Section ═══════════════════════════════════════════ -->
-  <section class="library" id="library">
-    <div class="container">
-      <h2 class="section-title">📚 Browse 100+ Curated Prompts</h2>
-      <p class="section-subtitle">Hand-crafted prompts ready to paste into your favourite AI image tool.</p>
-
-      <div class="category-filters" id="category-filters">
-        <button class="filter-pill active" data-category="all">All</button>
-        <button class="filter-pill" data-category="portrait">Portrait</button>
-        <button class="filter-pill" data-category="landscape">Landscape</button>
-        <button class="filter-pill" data-category="product">Product</button>
-        <button class="filter-pill" data-category="anime">Anime</button>
-        <button class="filter-pill" data-category="architecture">Architecture</button>
       </div>
 
-      <div class="prompt-grid" id="prompt-grid">
-        <!-- Cards injected by JS -->
-      </div>
-
-      <button class="load-more-btn" id="load-more-btn" type="button">Load More</button>
-    </div>
-  </section>
-
-  <!-- ═══ How It Works ═════════════════════════════════════════════════════ -->
-  <section class="how-it-works" id="how-it-works">
-    <div class="container">
-      <h2 class="section-title" style="text-align:center">How It Works</h2>
-      <p class="section-subtitle" style="text-align:center">Three simple steps to the perfect AI image.</p>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-icon">📝</div>
-          <span class="step-num">Step 1</span>
-          <h3>Fill the Form</h3>
-          <p>Describe your subject, pick a style, lighting, mood, and target tool.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-icon">⚡</div>
-          <span class="step-num">Step 2</span>
-          <h3>Generate Prompt</h3>
-          <p>Our engine crafts a detailed, tool-optimised prompt instantly.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-icon">🎨</div>
-          <span class="step-num">Step 3</span>
-          <h3>Paste & Create</h3>
-          <p>Copy the prompt and paste it into MidJourney, DALL-E 3, or Flux.</p>
+      <!-- High-Yield Ad Break -->
+      <div class="container ad-break-container">
+        <div id="ad-mid-banner" class="ad-zone">
+          <span>728 × 90 — Middle Content Ad Space</span>
         </div>
       </div>
-    </div>
-  </section>
+
+      <!-- Library Grid -->
+      <div class="container library-preview">
+        <h2 class="sub-heading" style="font-family:'Syne',sans-serif;margin-bottom:24px;">Community Atlas</h2>
+        <div class="prompt-grid" id="prompt-grid"></div>
+        <button class="load-more-btn glass-panel" id="load-more-btn" type="button">Access Archive</button>
+      </div>
+
+    </section>
+
+    <!-- ═══ ABOUT VIEW ═════════════════════════════════════════════════════ -->
+    <section id="view-about" class="spa-view page-container container pt-nav">
+      <h1 class="page-title">About Protocol</h1>
+      <div class="page-content glass-panel" style="padding:48px;">
+        <h3 style="color:var(--teal);margin-bottom:12px;font-family:'Syne'">The Antigravity Mission</h3>
+        <p style="margin-bottom:32px;color:rgba(255,255,255,0.8);font-size:1.1rem;line-height:1.7;">At Antigravity, we believe the barrier between human imagination and digital reality should be weightless. We built this unified parameter matrix to act as the ultimate translation layer between raw human thought and state-of-the-art vision models.</p>
+        
+        <h3 style="color:var(--violet);margin-bottom:12px;font-family:'Syne'">Built For Professionals</h3>
+        <p style="margin-bottom:40px;color:rgba(255,255,255,0.8);font-size:1.1rem;line-height:1.7;">Whether you are a Prompt Engineer, Digital Artist, or Creative Director, our tooling maximizes the aesthetic fidelity of MidJourney, DALL-E, and Flux without requiring you to manually write syntax vectors.</p>
+
+        <div id="ad-about-rect" class="ad-zone" style="max-width:300px;height:250px;margin:0 auto">
+          <span>300 × 250 — Display Ad</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ FAQ VIEW ═══════════════════════════════════════════════════════ -->
+    <section id="view-faq" class="spa-view page-container container pt-nav">
+      <h1 class="page-title">Database Queries (FAQ)</h1>
+      <div class="page-content">
+        
+        <div class="faq-item glass-panel" style="padding:24px;margin-bottom:16px;">
+          <h4 style="font-size:1.15rem;margin-bottom:8px;font-family:'Syne'">How does the Unified Image Upload feature work?</h4>
+          <p style="color:rgba(255,255,255,0.7);font-size:1rem;">We automatically trace the metadata and reference semantics of your dropped image. The compiler seamlessly injects a reference wrapper directly into the target model's syntax.</p>
+        </div>
+
+        <div class="faq-item glass-panel" style="padding:24px;margin-bottom:16px;">
+          <h4 style="font-size:1.15rem;margin-bottom:8px;font-family:'Syne'">Do you charge for API requests?</h4>
+          <p style="color:rgba(255,255,255,0.7);font-size:1rem;">Antigravity is completely free. We sustain our infrastructure and data centers exclusively through premium, non-intrusive advertisements across the platform.</p>
+        </div>
+
+        <div class="faq-item glass-panel" style="padding:24px;margin-bottom:40px;">
+          <h4 style="font-size:1.15rem;margin-bottom:8px;font-family:'Syne'">Which engine outperforms the others?</h4>
+          <p style="color:rgba(255,255,255,0.7);font-size:1rem;">MidJourney v6 yields highest aesthetic fidelity. DALL-E 3 excels at logical mapping and prompt obedience. Flux produces photorealistic raw detail scaling seamlessly between concepts.</p>
+        </div>
+
+        <div id="ad-faq-banner" class="ad-zone" style="max-width:728px;height:90px;margin:0 auto">
+          <span>728 × 90 — Banner Ad</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CONTACT VIEW ═══════════════════════════════════════════════════ -->
+    <section id="view-contact" class="spa-view page-container container pt-nav">
+      <h1 class="page-title">Establish Link</h1>
+      
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start" class="contact-grid">
+        <form class="glass-panel" style="padding:40px;" onsubmit="event.preventDefault(); alert('Transmission secured.');">
+          <div style="margin-bottom:20px;">
+            <label style="display:block;font-size:0.85rem;color:var(--teal);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Callsign / Name</label>
+            <input type="text" required class="glass-input" style="width:100%;padding:16px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff;border-radius:12px;outline:none;" placeholder="Enter identity">
+          </div>
+          <div style="margin-bottom:20px;">
+            <label style="display:block;font-size:0.85rem;color:var(--teal);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Transmission Vector (Email)</label>
+            <input type="email" required class="glass-input" style="width:100%;padding:16px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff;border-radius:12px;outline:none;" placeholder="comms@system.net">
+          </div>
+          <div style="margin-bottom:30px;">
+            <label style="display:block;font-size:0.85rem;color:var(--teal);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Data Packet</label>
+            <textarea required rows="5" class="glass-input" style="width:100%;padding:16px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff;border-radius:12px;outline:none;font-family:inherit;resize:vertical;" placeholder="Input telemetry..."></textarea>
+          </div>
+          <button type="submit" class="generate-btn-unified" style="width:auto;padding:0 32px">Send Transmission</button>
+        </form>
+
+        <div>
+          <div class="glass-panel" style="padding:32px;margin-bottom:24px;">
+            <h3 style="color:var(--violet);margin-bottom:12px;font-family:'Syne'">Ad Inventory</h3>
+            <p style="color:rgba(255,255,255,0.7);font-size:0.95rem;line-height:1.6;">Direct buyouts and ad-placement sponsorships are available globally. Connect to negotiate terms.</p>
+          </div>
+          <div id="ad-contact-rect" class="ad-zone" style="width:100%;height:250px;">
+            <span>300 × 250 — Premium Rect</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
 
   <!-- ═══ Footer ═══════════════════════════════════════════════════════════ -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-brand">🎨 <span>Prompt</span>Gen</div>
-        <div class="footer-links">
-          <a href="#privacy">Privacy Policy</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-        </div>
+  <footer class="footer container" style="margin-top:80px;padding-bottom:40px;border-top:1px solid rgba(255,255,255,0.05);padding-top:40px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;opacity:0.6;font-size:0.85rem;">
+      <div style="font-family:'Syne';font-weight:700;display:flex;align-items:center;gap:6px;">
+         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg> ANTIGRAVITY ENGINE
       </div>
-      <p class="footer-tagline">Built for MidJourney, DALL-E 3, and Flux users · © 2026 PromptGen</p>
+      <div>© 2026 Deep Space Systems</div>
     </div>
   </footer>
 
